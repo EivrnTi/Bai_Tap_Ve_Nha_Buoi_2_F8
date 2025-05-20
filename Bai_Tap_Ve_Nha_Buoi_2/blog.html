@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hướng Dẫn Xây Dựng Ứng Dụng Todo List Đơn Giản</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #2c3e50;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+        margin-top: 30px;
+      }
+      h1 {
+        text-align: center;
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      pre {
+        background-color: #272822; /* Màu nền của theme okaidia */
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        margin-bottom: 20px;
+      }
+      code {
+        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        font-size: 0.9em;
+        color: #f8f8f2; /* Màu chữ của theme okaidia */
+        background-color: #272822; /* Đảm bảo màu nền cho inline code khớp */
+        padding: 2px 4px;
+        border-radius: 3px;
+      }
+      pre code {
+        display: block; /* Đảm bảo code bên trong pre hiển thị dạng block */
+        background-color: transparent; /* Xóa màu nền riêng của code khi nằm trong pre */
+        padding: 0;
+      }
+      .section-description,
+      .code-explanation {
+        margin-bottom: 15px;
+      }
+      ul {
+        list-style-type: disc;
+        margin-left: 20px;
+      }
+      li {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <strong>
+      Day 2: Bài Tập Về Nhà <br />
+      <ul>
+        <li><a href="index.html">1. Tạo trang hiển thị một bài thơ</a></li>
+        <li><a href="news.html">2. Tạo một bài viết nói về bài thơ trên</a></li>
+        <li>
+          <a href="blog.html">3. Highlight code trong nội dung bài viết</a>
+        </li>
+        <li><a href="intro.html">4. Xây dựng trang giới thiệu bản thân</a></li>
+      </ul>
+    </strong>
+    <h1>Hướng Dẫn Xây Dựng Ứng Dụng Todo List Đơn Giản</h1>
+
+    <p>
+      Ứng dụng Todo List là một dự án nhỏ nhưng rất hữu ích để làm quen với lập
+      trình web. Chúng ta sẽ xây dựng một ứng dụng cho phép người dùng thêm công
+      việc, hiển thị danh sách công việc và xóa chúng khi hoàn thành.
+    </p>
+
+    <h2>Các bước thực hiện:</h2>
+
+    <hr />
+
+    <h2 id="buoc-1-html">Bước 1: Tạo cấu trúc HTML (index.html)</h2>
+    <div class="section-description">
+      <p>
+        Đầu tiên, chúng ta sẽ tạo một file <code>index.html</code> để định nghĩa
+        cấu trúc cơ bản của ứng dụng. Đây là nơi chứa các phần tử giao diện như
+        ô nhập liệu, nút thêm và danh sách các công việc.
+      </p>
+    </div>
+    <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="vi"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Ứng dụng Todo List&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="todo-container"&gt;
+        &lt;h1&gt;Todo List&lt;/h1&gt;
+        &lt;div class="input-section"&gt;
+            &lt;input type="text" id="todo-input" placeholder="Thêm công việc mới..."&gt;
+            &lt;button id="add-button"&gt;Thêm&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;ul id="todo-list"&gt;
+            &lt;!-- Công việc sẽ được thêm vào đây bằng JavaScript --&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+    <div class="code-explanation">
+      <p><strong>Giải thích:</strong></p>
+      <ul>
+        <li>
+          <code>&lt;!DOCTYPE html&gt;</code> và <code>&lt;html&gt;</code>: Khai
+          báo loại tài liệu và thẻ gốc của trang HTML.
+        </li>
+        <li>
+          <code>&lt;head&gt;</code>: Chứa các thông tin meta như charset (<code
+            >UTF-8</code
+          >
+          cho tiếng Việt), viewport (tối ưu hiển thị trên các thiết bị), tiêu đề
+          trang (<code>&lt;title&gt;</code>) và liên kết đến file CSS (<code
+            >&lt;link rel="stylesheet" href="style.css"&gt;</code
+          >).
+        </li>
+        <li><code>&lt;body&gt;</code>: Chứa nội dung hiển thị của trang.</li>
+        <li>
+          <code>&lt;div class="todo-container"&gt;</code>: Một thẻ
+          <code>div</code> bao bọc toàn bộ ứng dụng, giúp dễ dàng tạo kiểu dáng
+          bằng CSS.
+        </li>
+        <li>
+          <code>&lt;h1&gt;Todo List&lt;/h1&gt;</code>: Tiêu đề chính của ứng
+          dụng.
+        </li>
+        <li>
+          <code>&lt;div class="input-section"&gt;</code>: Chứa ô nhập liệu
+          (<code>&lt;input type="text" id="todo-input"&gt;</code>) và nút thêm
+          (<code>&lt;button id="add-button"&gt;</code>). Các <code>id</code> này
+          sẽ được sử dụng bởi JavaScript để thao tác.
+        </li>
+        <li>
+          <code>&lt;ul id="todo-list"&gt;</code>: Một danh sách không thứ tự nơi
+          các công việc sẽ được hiển thị.
+        </li>
+        <li>
+          <code>&lt;script src="script.js"&gt;&lt;/script&gt;</code>: Liên kết
+          đến file JavaScript, được đặt ở cuối <code>&lt;body&gt;</code> để đảm
+          bảo các phần tử HTML đã được tải trước khi script thực thi.
+        </li>
+      </ul>
+    </div>
+
+    <hr />
+
+    <h2 id="buoc-2-css">Bước 2: Tạo kiểu dáng với CSS (style.css)</h2>
+    <div class="section-description">
+      <p>
+        Tiếp theo, chúng ta sẽ tạo một file <code>style.css</code> để làm cho
+        ứng dụng trông đẹp mắt hơn. Điều này bao gồm việc định dạng các phần tử,
+        màu sắc và bố cục.
+      </p>
+    </div>
+    <pre><code class="language-css">
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.todo-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.input-section {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#todo-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+#add-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#add-button:hover {
+    background-color: #0056b3;
+}
+
+#todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#todo-list li {
+    background-color: #e9ecef;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    word-break: break-word; /* Để văn bản dài tự động xuống dòng */
+}
+
+#todo-list li button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#todo-list li button:hover {
+    background-color: #c82333;
+}
+    </code></pre>
+    <div class="code-explanation">
+      <p><strong>Giải thích:</strong></p>
+      <ul>
+        <li>
+          <code>body</code>: Định nghĩa font chữ, màu nền, và sử dụng Flexbox để
+          căn giữa nội dung ứng dụng trên trang.
+          <code>min-height: 100vh;</code> đảm bảo body chiếm toàn bộ chiều cao
+          khung nhìn.
+        </li>
+        <li>
+          <code>.todo-container</code>: Thẻ bao bọc chính, được tạo kiểu dáng
+          với màu nền trắng, padding, bo tròn góc, và đổ bóng để tạo hiệu ứng
+          nổi bật.
+        </li>
+        <li><code>h1</code>: Đặt màu chữ cho tiêu đề.</li>
+        <li>
+          <code>.input-section</code>: Sử dụng Flexbox để sắp xếp ô nhập liệu và
+          nút thêm trên cùng một hàng.
+        </li>
+        <li>
+          <code>#todo-input</code>: Ô nhập liệu được làm cho đầy đủ chiều rộng
+          còn lại (<code>flex-grow: 1;</code>), có padding và viền.
+        </li>
+        <li>
+          <code>#add-button</code>: Nút "Thêm" được tạo màu xanh lam, có hiệu
+          ứng chuyển màu khi di chuột qua.
+        </li>
+        <li>
+          <code>#todo-list</code>: Xóa bỏ dấu đầu dòng mặc định của danh sách
+          (<code>list-style: none;</code>) và padding.
+        </li>
+        <li>
+          <code>#todo-list li</code>: Mỗi mục công việc (<code>li</code>) có màu
+          nền, padding, bo tròn góc, và sử dụng Flexbox để căn giữa nội dung và
+          nút xóa, đồng thời <code>word-break: break-word;</code> giúp văn bản
+          dài xuống dòng.
+        </li>
+        <li>
+          <code>#todo-list li button</code>: Nút xóa bên trong mỗi công việc
+          được tạo màu đỏ, có hiệu ứng hover.
+        </li>
+      </ul>
+    </div>
+
+    <hr />
+
+    <h2 id="buoc-3-js">Bước 3: Thêm chức năng với JavaScript (script.js)</h2>
+    <div class="section-description">
+      <p>
+        Cuối cùng, chúng ta sẽ tạo file <code>script.js</code> để thêm các chức
+        năng tương tác cho ứng dụng: thêm công việc, hiển thị và xóa công việc.
+      </p>
+    </div>
+    <pre><code class="language-javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    const todoInput = document.getElementById('todo-input');
+    const addButton = document.getElementById('add-button');
+    const todoList = document.getElementById('todo-list');
+
+    // Hàm thêm công việc
+    function addTodo() {
+        const todoText = todoInput.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng thừa
+        if (todoText === '') {
+            alert('Vui lòng nhập công việc!');
+            return;
+        }
+
+        // Tạo thẻ li mới
+        const listItem = document.createElement('li');
+
+        // Tạo span chứa nội dung công việc
+        const todoSpan = document.createElement('span');
+        todoSpan.textContent = todoText;
+
+        // Tạo nút xóa
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Xóa';
+        deleteButton.addEventListener('click', function() {
+            todoList.removeChild(listItem); // Xóa mục công việc khỏi danh sách
+        });
+
+        // Thêm span và button vào li
+        listItem.appendChild(todoSpan);
+        listItem.appendChild(deleteButton);
+
+        // Thêm li vào danh sách ul
+        todoList.appendChild(listItem);
+
+        // Xóa nội dung trong ô nhập liệu
+        todoInput.value = '';
+    }
+
+    // Gắn sự kiện click cho nút Thêm
+    addButton.addEventListener('click', addTodo);
+
+    // Gắn sự kiện Enter cho ô nhập liệu
+    todoInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            addTodo();
+        }
+    });
+});
+    </code></pre>
+    <div class="code-explanation">
+      <p><strong>Giải thích:</strong></p>
+      <ul>
+        <li>
+          <code
+            >document.addEventListener('DOMContentLoaded', function() { ...
+            });</code
+          >: Đảm bảo mã JavaScript chỉ chạy sau khi toàn bộ tài liệu HTML đã
+          được tải và phân tích cú pháp.
+        </li>
+        <li>
+          <code>const todoInput = document.getElementById('todo-input');</code>:
+          Lấy tham chiếu đến phần tử ô nhập liệu bằng <code>id</code> của nó.
+        </li>
+        <li>
+          <code>const addButton = document.getElementById('add-button');</code>:
+          Lấy tham chiếu đến nút "Thêm".
+        </li>
+        <li>
+          <code>const todoList = document.getElementById('todo-list');</code>:
+          Lấy tham chiếu đến danh sách <code>&lt;ul&gt;</code>.
+        </li>
+        <li>
+          <strong>Hàm <code>addTodo()</code>:</strong>
+          <ul>
+            <li>
+              <code>todoInput.value.trim()</code>: Lấy giá trị từ ô nhập liệu và
+              dùng <code>.trim()</code> để loại bỏ các khoảng trắng ở đầu và
+              cuối chuỗi.
+            </li>
+            <li>
+              Kiểm tra nếu <code>todoText</code> rỗng, hiển thị cảnh báo và
+              thoát hàm.
+            </li>
+            <li>
+              <code>document.createElement('li')</code>: Tạo một thẻ
+              <code>&lt;li&gt;</code> mới.
+            </li>
+            <li>
+              <code>document.createElement('span')</code>: Tạo một thẻ
+              <code>&lt;span&gt;</code> để chứa nội dung công việc.
+            </li>
+            <li>
+              <code>todoSpan.textContent = todoText;</code>: Gán nội dung công
+              việc cho <code>&lt;span&gt;</code>.
+            </li>
+            <li>
+              <code>document.createElement('button')</code>: Tạo một thẻ
+              <code>&lt;button&gt;</code> cho chức năng xóa.
+            </li>
+            <li>
+              <code
+                >deleteButton.addEventListener('click', function() { ...
+                });</code
+              >: Gắn sự kiện click cho nút xóa. Khi click, nó sẽ gọi
+              <code>todoList.removeChild(listItem);</code> để xóa mục
+              <code>&lt;li&gt;</code> tương ứng khỏi danh sách.
+            </li>
+            <li>
+              <code>listItem.appendChild(...)</code>: Thêm
+              <code>&lt;span&gt;</code> và nút xóa vào <code>&lt;li&gt;</code>.
+            </li>
+            <li>
+              <code>todoList.appendChild(listItem);</code>: Thêm
+              <code>&lt;li&gt;</code> mới tạo vào danh sách
+              <code>&lt;ul&gt;</code>.
+            </li>
+            <li>
+              <code>todoInput.value = '';</code>: Xóa nội dung trong ô nhập liệu
+              sau khi thêm công việc.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <code>addButton.addEventListener('click', addTodo);</code>: Gắn hàm
+          <code>addTodo</code> vào sự kiện click của nút "Thêm".
+        </li>
+        <li>
+          <code
+            >todoInput.addEventListener('keypress', function(event) { ...
+            });</code
+          >: Gắn sự kiện <code>keypress</code> (nhấn phím) cho ô nhập liệu. Nếu
+          phím được nhấn là <code>Enter</code> (<code
+            >event.key === 'Enter'</code
+          >), hàm <code>addTodo</code> sẽ được gọi, giúp người dùng thêm công
+          việc nhanh chóng bằng cách nhấn Enter.
+        </li>
+      </ul>
+    </div>
+
+    <hr />
+
+    <h2 id="ket-thuc">Hoàn thành!</h2>
+    <p>
+      Vậy là bạn đã hoàn thành một ứng dụng Todo List đơn giản với đầy đủ chức
+      năng thêm, hiển thị và xóa. Bạn có thể mở file
+      <code>index.html</code> trong trình duyệt để xem kết quả. Hãy tiếp tục
+      khám phá và tùy chỉnh để làm cho ứng dụng trở nên phong phú hơn nhé!
+    </p>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  </body>
+</html>
